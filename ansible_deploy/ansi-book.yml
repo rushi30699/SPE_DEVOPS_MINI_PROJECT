@@ -1,0 +1,19 @@
+- name: Pull docker image of Calculator
+  hosts: all
+  tasks:
+    - name: Start docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Pull docker image
+      shell: docker pull docker.io/rushi4350/calculator:first
+
+    - name: Run container
+      shell: docker run -it -d rushi4350/calculator:first
+      register: run_container_output
+
+    - name: Display output of docker run command
+      debug:
+        var: run_container_output.stdout_lines
+
