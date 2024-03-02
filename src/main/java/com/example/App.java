@@ -2,12 +2,8 @@ package com.example;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class App {
-
-    private static final Logger logger = LogManager.getLogger(App.class);
 
     public App() {
     }
@@ -19,15 +15,20 @@ public class App {
             double num1, num2;
 
             do {
-                System.out.println("Calculator using DevOps. \n Choose:");
+                // Display menu options
+                System.out.println("Calculator using DevOps.. \n Choose:");
                 System.out.print("1. Factorial\n2. Square root\n3. Power\n4. Natural Logarithm\n" +
                         "5. Exit\nEnter your choice: ");
 
                 int choice;
                 try {
+                    // Get user input for operation choice
                     choice = scanner.nextInt();
                 } catch (InputMismatchException error) {
-                    return;
+                    // Handle invalid input (non-integer)
+                    System.out.println("Invalid input. Please enter a valid integer.");
+                    scanner.next(); // Consume the invalid input
+                    continue;
                 }
 
                 switch (choice) {
@@ -35,6 +36,7 @@ public class App {
                         // Factorial
                         System.out.print("Enter a number : ");
                         num1 = scanner.nextDouble();
+                        // Display factorial result
                         System.out.println("Factorial of " + num1 + " is : " + app.factorial(num1));
                         System.out.println("\n");
                         break;
@@ -43,6 +45,7 @@ public class App {
                         // Square root
                         System.out.print("Enter a number : ");
                         num1 = scanner.nextDouble();
+                        // Display square root result
                         System.out.println("Square root of " + num1 + " is : " + app.squareRoot(num1));
                         System.out.println("\n");
                         break;
@@ -53,6 +56,7 @@ public class App {
                         num1 = scanner.nextDouble();
                         System.out.print("Enter the second number : ");
                         num2 = scanner.nextDouble();
+                        // Display power result
                         System.out.println(num1 + " raised to power " + num2 + " is : " + app.power(num1, num2));
                         System.out.println("\n");
                         break;
@@ -61,11 +65,13 @@ public class App {
                         // Natural log
                         System.out.print("Enter a number : ");
                         num1 = scanner.nextDouble();
+                        // Display natural log result
                         System.out.println("Natural log of " + num1 + " is : " + app.naturalLog(num1));
                         System.out.println("\n");
                         break;
 
                     default:
+                        // Exit the calculator
                         System.out.println("Exit");
                         return;
                 }
@@ -73,13 +79,16 @@ public class App {
         }
     }
 
+    // Factorial calculation method
     public double factorial(double number1) {
-        logger.info("[FACTORIAL] - " + number1);
+        if (number1 < 0) {
+            return Double.NaN;
+        }
         double result = fact(number1);
-        logger.info("[RESULT - FACTORIAL] - " + result);
         return result;
     }
 
+    // Recursive factorial calculation method
     public double fact(double num) {
         double facto = 1;
         for (int i = 1; i <= num; ++i) {
@@ -88,45 +97,42 @@ public class App {
         return facto;
     }
 
+    // Square root calculation method
     public double squareRoot(double number1) {
-        logger.info("[SQ ROOT] - " + number1);
         double result = 0;
         try {
+            // Check for negative input (imaginary number)
             if (number1 < 0) {
-                throw new Exception("Case of Imaginary Number");
+                throw new IllegalArgumentException("Case of Imaginary Number");
             }
+            // Calculate square root
             result = Math.sqrt(number1);
-        } catch (Exception error) {
-            logger.error("[EXCEPTION - LOG] - Cannot find square root of negative numbers");
+        } catch (IllegalArgumentException error) {
+            // Handle exception for negative square root
             return Double.NaN;
         }
-        logger.info("[RESULT - SQ ROOT] - " + result);
         return result;
     }
 
+    // Power calculation method
     public double power(double number1, double number2) {
-        logger.info("[POWER - " + number1 + " RAISED TO] " + number2);
         double result = Math.pow(number1, number2);
-        logger.info("[RESULT - POWER] - " + result);
         return result;
     }
 
+    // Natural logarithm calculation method
     public double naturalLog(double number1) {
-        logger.info("[NATURAL LOG] - " + number1);
         double result = 0;
-        try {
-
-            if (number1 < 0) {
-                result = Double.NaN;
-                throw new ArithmeticException("Case of NaN 0.0/0.0");
-            } else {
-                result = Math.log(number1);
-            }
-        } catch (ArithmeticException error) {
-            logger.error("[EXCEPTION - LOG] - Cannot find logarithm of negative numbers");
+        // Check for special cases
+        if (number1 == 0) {
             return Double.NaN;
+        } else if (number1 < 0) {
+            return Double.NaN;
+        } else {
+            // Calculate natural log
+            result = Math.log(number1);
         }
-        logger.info("[RESULT - NATURAL LOG] - " + result);
+
         return result;
     }
 }

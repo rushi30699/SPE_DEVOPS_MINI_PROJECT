@@ -1,7 +1,7 @@
 package com.example;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -14,14 +14,15 @@ public class AppTest {
 
     @Test
     public void testFactorialWithPositiveNumbers() {
-        assertEquals("Factorial of 6", 720, calculator.fact(6), DELTA);
-        assertEquals("Factorial of 0", 1, calculator.fact(0), DELTA);
+        assertEquals("Factorial of 6", 720, calculator.factorial(6), DELTA);
+        assertEquals("Factorial of 0", 1, calculator.factorial(0), DELTA);
     }
 
     @Test
     public void testFactorialWithNegativeNumbers() {
-        assertNotEquals("Factorial of 5", 113, calculator.fact(5), DELTA);
-        assertNotEquals("Factorial of 6", 10, calculator.fact(6), DELTA);
+
+        assertTrue("Factorial of -5 should be NaN", Double.isNaN(calculator.factorial(-5)));
+        assertTrue("Factorial of -6 should be NaN", Double.isNaN(calculator.factorial(-6)));
     }
 
     @Test
@@ -30,10 +31,9 @@ public class AppTest {
         assertEquals("Power of 5^2", 25, calculator.power(5, 2), DELTA);
     }
 
-    @Test
-    public void testPowerWithNegativeNumbers() {
-        assertNotEquals("Power of 2^3", 6, calculator.power(2, 3), DELTA);
-        assertNotEquals("Power of 3^3", -7, calculator.power(3, 3), DELTA);
+    public void testPowerWithNegativeExponents() {
+        assertEquals("Power of 2^(-3) should be 1/8", 1.0 / 8.0, calculator.power(2, -3), DELTA);
+        assertEquals("Power of 3^(-2) should be 1/9", 1.0 / 9.0, calculator.power(3, -2), DELTA);
     }
 
     @Test
@@ -44,8 +44,8 @@ public class AppTest {
 
     @Test
     public void testNaturalLogWithNegativeNumbers() {
-        assertNotEquals("Natural log of 2.4", 60, calculator.naturalLog(2.4), DELTA);
-        assertNotEquals("Natural log of 2.1", 4.7, calculator.naturalLog(2.1), DELTA);
+        assertTrue("Natural log of -2.4 should be NaN", Double.isNaN(calculator.naturalLog(-2.4)));
+        assertTrue("Natural log of -2.1 should be NaN", Double.isNaN(calculator.naturalLog(-2.1)));
     }
 
     @Test
@@ -56,7 +56,8 @@ public class AppTest {
 
     @Test
     public void testSquareRootWithNegativeNumbers() {
-        assertNotEquals("Square root of 3", 1, calculator.squareRoot(3), DELTA);
-        assertNotEquals("Square root of 81", 4, calculator.squareRoot(81), DELTA);
+        assertTrue("Square root of -3 should not be a real number", Double.isNaN(calculator.squareRoot(-3)));
+        assertTrue("Square root of -81 should not be a real number", Double.isNaN(calculator.squareRoot(-81)));
     }
+
 }
