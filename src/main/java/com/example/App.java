@@ -16,7 +16,7 @@ public class App {
 
             do {
                 // Display menu options
-                System.out.println("Calculator using DevOps.. \n Choose:");
+                System.out.println("Calculator using DevOps. \n Choose:");
                 System.out.print("1. Factorial\n2. Square root\n3. Power\n4. Natural Logarithm\n" +
                         "5. Exit\nEnter your choice: ");
 
