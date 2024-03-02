@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+    environment {
+        GITHUB_CREDENTIALS = credentials("github-credentials")
+    }
+
+    stages {
+        stage('Git Pull') {
+            steps {
+                git credentialsId: GITHUB_CREDENTIALS,
+                 url: 'https://github.com/rushi30699/SPE_DEVOPS_MINI_PROJECT.git'
+                
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    sh 'mvn clean install'
+                }
+            }
+        }
+        
+        stage('Building a Docker Image') {
+            steps {
+                script {
+                    imageName = docker.build("rushi4350/calculator:first")
+                }
+            }
+        }
+        stage('Push The Docker Image') {
+            steps {
+                script {
+                   withDockerRegistry([ credentialsId: "docker-hub-credentials", url: "" ]) {
+                    imageName.push()
+                    }
+                }
+            }
+        }
+        
+                stage('Ansible Pull Docker Image') {
+    steps {
+        ansiblePlaybook becomeUser: null,
+                        colorized: true,
+                        disableHostKeyChecking: true,
+                        installation: 'Ansible',
+                        inventory: 'ansible_deploy/inventory.ini',
+                        playbook: 'ansible_deploy/ansi-book.yml',
+                        sudoUser: null
+    }
+}
+
+        
+
+    }
+}
+
